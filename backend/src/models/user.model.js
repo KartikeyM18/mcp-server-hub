@@ -24,7 +24,7 @@ const userSchema = new Schema({
   
     refreshToken: {
         type: String,
-        required: true
+        required: false
     },
     submittedserver:[
         {
@@ -52,12 +52,12 @@ userSchema.methods.isPasswordMatch = async function (password) {
     return await bcrypt.compare(password, this.password);
 }
 userSchema.methods.generateAccessToken = function () {
-    return jwt.sign({ id: this._id }, process.env.JWT_ACCESS_SECRET, {
+    return jwt.sign({ _id: this._id }, process.env.JWT_ACCESS_SECRET, {
         expiresIn:process.env.JWT_ACCESS_EXPIRATION,
     });
 }
 userSchema.methods.generateRefreshToken = function () {
-    return jwt.sign({ id: this._id }, process.env.JWT_REFRESH_SECRET, {
+    return jwt.sign({ _id: this._id }, process.env.JWT_REFRESH_SECRET, {
         expiresIn:process.env.JWT_REFRESH_EXPIRATION,
     });
 }
