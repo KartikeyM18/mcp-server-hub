@@ -113,7 +113,31 @@ const getallservers = asynchandler(async (req, res) => {
     }
 });
 
+const getserverbyid = asynchandler(async (req, res) => {
+    const { serverid } = req.params;
+    if (!serverid) {
+        throw new ApiError(400, "Server ID is required");
+    }
+
+    try {
+        const server = await Server.findById(serverid).populate('submittedBy', 'name email');
+
+        if (!server) {
+            throw new ApiError(404, "Server not found");
+        }
+
+        return res.status(200).json(
+            new ApiResponse(200, server, "Server retrieved successfully")
+        );
+    } catch (error) {
+        throw new ApiError(500, "Error retrieving server");
+    }
+}
+);
 
 
 
-export { submitaserver, editServer, deleteServer, getallservers };
+export { submitaserver,editServer,deleteServer,getallservers,getserverbyid };
+
+
+
