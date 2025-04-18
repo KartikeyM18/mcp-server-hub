@@ -24,3 +24,32 @@ export const verifyjwt = asynchandler(async (req, _, next) => {
     }
 
 })
+
+;
+
+export const optionalJwt = async (req, _, next) => {
+  try {
+    const token =
+      req.cookies?.accessToken ||
+      req.header("Authorization")?.replace("Bearer ", "");
+
+    if (!token) {
+      req.user = null;
+      return next();
+    }
+
+    const decodedToken = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+    const user = await User.findById(decodedToken._id).select("-password -refreshToken");
+
+    if (!user) {
+      req.user = "guest";
+    } else {
+      req.user = user;
+    }
+  } catch (error) {
+    // Token is invalid or expired
+    req.user = null;
+  }
+
+  next();
+};

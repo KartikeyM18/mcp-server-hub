@@ -29,7 +29,7 @@ const serverSchema = new mongoose.Schema({
     submittedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true,
+    
         default: null,
     },
    

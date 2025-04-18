@@ -6,14 +6,20 @@ import asynchandler from "../utils/asynchandler.js";
 import jwt from "jsonwebtoken";
 
 const generatebothtokens = async (userid) => {
+   
+  if (!userid) {
+    throw new ApiError(400, "User ID is required");
+  }
+
   try {
     const user = await User.findById(userid);
     if (!user) {
       throw new ApiError(404, "User not found");
     }
-    // console.log("id",user._id)
-    const accessToken = user.generateAccessToken();
+ 
+   
     const refreshToken = user.generateRefreshToken();
+    const accessToken = user.generateAccessToken();
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
 
@@ -24,7 +30,7 @@ const generatebothtokens = async (userid) => {
 
 
   } catch (error) {
-
+     console.error("Error generating tokens:", error);
     throw new ApiError(500, "Internal server error while generating the tokens", error);
   }
 }
@@ -68,22 +74,28 @@ const registerUser = asynchandler(async (req,res) => {
 
 const loginUser = asynchandler(async (req, res) => {
 
-  const { username, password } = req.body;
-  if (!username || !password) {
+  const { email, password } = req.body;
+  if (!email || !password) {
     throw new ApiError(400, "All fields are required");
   }
 
   const user = await User.findOne({
-    $or: [{ username }],
+    $or: [{ email}],
   })
 
   if (!user) {
-    throw new ApiError(400, "Invalid username or password");
+    throw new ApiError(400, "Invalid email or password");
   }
   const isPasswordMatch = await user.isPasswordMatch(password);
   if (!isPasswordMatch) {
-    throw new ApiError(400, "Invalid username or password");
+    throw new ApiError(400, "Invalid password");
+
   }
+
+  if(!user._id){
+    throw new ApiError(400, "user id not found");
+  }
+
   const { accessToken, refreshToken } = await generatebothtokens(user._id);
   const loggedinuser = await User.findById(user._id).select("-password -refreshToken");
   const options = {
@@ -209,24 +221,34 @@ const SubmittedServers = asynchandler(async (req, res) => {
 });
 
 const userProfile = asynchandler(async (req, res) => {
-  const userId = req.user?._id;
-
+  const{ username } = req.params;
+  if (!username.trim()) {
+    throw new ApiError(400, "Username is required");
+  }
   try {
-    const user = await User.findById(userId).select("-password -refreshToken");
+    const user = await User.findOne({username}).select("-password -refreshToken");
+   
     if (!user) {
       throw new ApiError(404, "User not found");
     }
-
+ 
     return res.status(200).json(
       new ApiResponse(200, user, "User profile retrieved successfully")
     );
   } catch (error) {
+    
     throw new ApiError(500, "Error retrieving user profile");
 
   }
 })
 
 
+const getcurrentuser =(req,res) => {
+   return res.status(200).json(
+    new ApiResponse(200, req.user, "current user retrieved successfully")
+  )
+} 
+
 export {
-  registerUser, loginUser, logoutuser, refreshingtheaccesstokens, changecurrpassword, SubmittedServers, userProfile
+  registerUser, loginUser, logoutuser, refreshingtheaccesstokens, changecurrpassword, SubmittedServers, userProfile,getcurrentuser
 };

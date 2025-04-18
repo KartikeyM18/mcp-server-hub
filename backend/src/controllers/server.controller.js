@@ -13,8 +13,8 @@ const submitaserver = asynchandler(async (req, res) => {
     }
 
     try {
-        const submittedBy = req.user?._id || null;
-
+         
+         const submittedBy = req.user?._id || null;
         const server = await Server.create({
             name,
             description,
@@ -22,7 +22,7 @@ const submitaserver = asynchandler(async (req, res) => {
             githubRepo,
             tags: tags || [],
             status: status || "active",
-            submittedBy,
+            submittedBy
         });
 
         return res.status(201).json(
@@ -91,7 +91,7 @@ const deleteServer = asynchandler(async (req, res) => {
         }
         await Server.findByIdAndDelete(serverid);
         return res.status(200).json(
-            new ApiResponse(200, server, "server deleted successfully")
+            new ApiResponse(200, "server deleted successfully")
         )
     } catch (error) {
         throw new ApiError(500, "error deleting server")
