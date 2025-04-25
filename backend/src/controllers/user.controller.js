@@ -61,7 +61,7 @@ const registerUser = asynchandler(async (req,res) => {
   });
   const createduser = await User.findById(user._id).select("-password -refreshToken");
   if (!createduser) {
-    throw new ApiError(400, "Something went wrong while creating user");
+    throw new ApiError(401, "Something went wrong while creating user");
   }
 
   return res.status(201).json(
@@ -93,7 +93,7 @@ const loginUser = asynchandler(async (req, res) => {
   }
 
   if(!user._id){
-    throw new ApiError(400, "user id not found");
+    throw new ApiError(401, "user id not found");
   }
 
   const { accessToken, refreshToken } = await generatebothtokens(user._id);

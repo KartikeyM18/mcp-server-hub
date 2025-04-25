@@ -1,5 +1,5 @@
 import asynchandler from "../utils/asynchandler.js";
-
+import { User } from "../models/user.model.js";
 import { Server } from "../models/server.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -11,10 +11,13 @@ const submitaserver = asynchandler(async (req, res) => {
     if (!name || !description || !githubRepo) {
         throw new ApiError(400, "Name, description, and GitHub repository URL are required");
     }
+    
+   
 
     try {
          
          const submittedBy = req.user?._id || null;
+
         const server = await Server.create({
             name,
             description,
@@ -25,6 +28,18 @@ const submitaserver = asynchandler(async (req, res) => {
             submittedBy
         });
 
+        if (!server) {
+            throw new ApiError(400, "Error creating server");
+        }
+
+        // If the server is created successfully, push the server ID to the user's submitted servers
+        if (submittedBy) {
+            const user = await User.findById(submittedBy);
+            if (user) {
+                user.submittedserver.push(server._id);
+                await user.save();
+            }
+        }
         return res.status(201).json(
             new ApiResponse(201, server, "Server submitted successfully")
         );
@@ -86,10 +101,13 @@ const deleteServer = asynchandler(async (req, res) => {
         if (!server) {
             throw new ApiError(404, "server not found")
         }
-        if (String(server.submittedBy) !== String(req.user._id)) {
-            throw new ApiError(403, "you are not authorized to delete this server")
-        }
+       
         await Server.findByIdAndDelete(serverid);
+        await User.findByIdAndUpdate(
+            server.submittedBy,
+            { $pull: { submittedserver: serverid } },
+            { new: true }
+        )
         return res.status(200).json(
             new ApiResponse(200, "server deleted successfully")
         )
@@ -100,10 +118,11 @@ const deleteServer = asynchandler(async (req, res) => {
 
 })
 
+
 const getallservers = asynchandler(async (req, res) => {
     try {
 
-        const servers = await Server.find().populate('submittedBy', 'name email');
+        const servers = await Server.find().populate('submittedBy', 'email');
 
         return res.status(200).json(
             new ApiResponse(200, { servers }, "All servers retrieved successfully")
@@ -135,9 +154,26 @@ const getserverbyid = asynchandler(async (req, res) => {
 }
 );
 
+const getSubmittedServers = asynchandler(async (req, res) => {
+    const userId = req.user?._id;
+
+    if (!userId) {
+        throw new ApiError(401, "Unauthorized request");
+    }
+
+    try {
+        const servers = await Server.find({ submittedBy: userId });
+
+        return res.status(200).json(
+            new ApiResponse(200, { servers }, "Servers retrieved successfully")
+        );
+    } catch (error) {
+        throw new ApiError(500, "Error retrieving servers");
+    }
+})
 
 
-export { submitaserver,editServer,deleteServer,getallservers,getserverbyid };
+export { submitaserver,editServer,deleteServer,getallservers,getserverbyid ,getSubmittedServers};
 
 
 
