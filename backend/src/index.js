@@ -1,23 +1,23 @@
 
-import * as dotenv from 'dotenv';
-import { connectDB } from './db/index.js';
-dotenv.config();
+  import * as dotenv from 'dotenv';
+  import { connectDB } from './db/index.js';
+  dotenv.config();
 
-import app from './app.js';
+  import app from './app.js';
 
-const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 3000;
 
-connectDB()
-  .then(() => {
-    app.listen(port, () => {
-      console.log(`✅ Server is running on port ${port}`);
+  connectDB()
+    .then(() => {
+      app.listen(port, () => {
+        console.log(`✅ Server is running on port ${port}`);
+      });
+    })
+    .catch((error) => {
+      console.error("❌ Error connecting to the database:", error);
     });
-  })
-  .catch((error) => {
-    console.error("❌ Error connecting to the database:", error);
+
+
+  app.on("error", (error) => {
+    console.error("❌ Express app error:", error);
   });
-
-
-app.on("error", (error) => {
-  console.error("❌ Express app error:", error);
-});
