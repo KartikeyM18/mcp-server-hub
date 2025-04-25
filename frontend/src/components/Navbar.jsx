@@ -1,17 +1,3 @@
-<<<<<<< HEAD
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
-
-const Navbar = () => {
-    const navigate = useNavigate();
-
-    return (
-        <nav className='p-2 relative flex justify-center items-center mt-4'>
-            <div className='absolute left-36'>
-                <h1 className='text-3xl font-bold'>
-                    MCP Server Hub
-                </h1>
-=======
 
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
@@ -49,16 +35,10 @@ const Navbar = () => {
                 <Link to="/profile" className="block px-4 py-2 hover:bg-gray-900 ">{user ? `${user.data?.username} profile`: "Guest profile"}</Link>
                 <Link to="/" onClick={logout} className="block px-4 py-2  hover:bg-gray-900">Logout</Link>
               </div>
->>>>>>> 8a4e2dd (stage ready of first)
             </div>
           )}
         </div>
 
-<<<<<<< HEAD
-            <div className='flex gap-4'>
-                <button onClick={()=>navigate('/')} className='hover:text-slate-800 text-lg font-semibold cursor-pointer'>Home</button>
-                <button onClick={()=>navigate('/submit')} className='hover:text-slate-800 text-lg font-semibold cursor-pointer' >Submit</button>
-=======
         {/* Mobile Menu Icon */}
         <div className="md:hidden">
           <button onClick={() => setMenuOpen(!menuOpen)}>
@@ -87,7 +67,6 @@ const Navbar = () => {
 
               <Link to="/profile" className="block px-4 py-2 hover:bg-gray-800 rounded">{user ? `${user.data?.username} profile`: "Guest profile"}</Link>
               <Link to="/" onClick={logout} className="block px-4 py-2 hover:bg-gray-800 rounded">Logout</Link>
->>>>>>> 8a4e2dd (stage ready of first)
             </div>
           )}
         </div>
