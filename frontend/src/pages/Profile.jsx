@@ -11,13 +11,13 @@ import { getSubmittedServers } from "../api/server";
 export default function UserProfile() {
   const { user } = useAuth();
 
-  const userData = user?.data;
+
  
   const [submittedServers, setSubmittedServers] = useState([]);
   const fetchSubmittedServers = async () => {
     try {
       const response = await getSubmittedServers();
-      console.log(response.data.servers);
+     
       setSubmittedServers(response.data.servers);
     } catch (error) {
       console.error("Error fetching submitted servers:", error);
@@ -67,9 +67,9 @@ export default function UserProfile() {
         <div className="bg-gray-900 p-6 rounded-xl shadow-md">
           <h2 className="text-3xl font-bold text-center mb-6">👤 Your Profile</h2>
           <div className="space-y-2 text-sm mb-4">
-            <p><span className="font-semibold">Username:</span> {userData?.username}</p>
-            <p><span className="font-semibold">Email:</span> {userData?.email}</p>
-            <p><span className="font-semibold">Submitted Servers:</span> {userData?.submittedserver?.length || 0}</p>
+            <p><span className="font-semibold">Username:</span> {user?.username}</p>
+            <p><span className="font-semibold">Email:</span> {user?.email}</p>
+            <p><span className="font-semibold">Submitted Servers:</span> {user?.submittedserver?.length || 0}</p>
           </div>
 
           <button
