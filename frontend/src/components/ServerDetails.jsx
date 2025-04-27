@@ -22,8 +22,6 @@ const navigate = useNavigate();
       
         setServer(res.data);
         setisOwner(res.data?.submittedBy?._id === user?.data?._id)
-       // update this depending on your response
-  
       }
       catch (err) {
         console.error("Failed to fetch server:", err);

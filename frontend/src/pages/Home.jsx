@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getallservers } from "../api/server";
 import ServerCard from "../components/ServerCard";
 import ServerSearch from "../components/SearchServer";
-import { useAuth } from "../contexts/AuthContext";
+
 export default function Home() {
   const tags = [
     "Community", "Database", "API", "Data", "Cloud", "Kubernetes", "AI", "Vector", "Browser", "Docker",

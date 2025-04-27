@@ -22,6 +22,7 @@ export const getallservers = async () => {
 export const getserverbyid = async (serverid) => {
     try {
         const response = await axios.get(`/server/${serverid}`);
+    
         return response.data;
     } catch (error) {
         console.error("Error fetching server by ID:", error);
