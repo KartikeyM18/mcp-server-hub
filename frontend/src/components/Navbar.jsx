@@ -8,8 +8,10 @@ import { User } from 'lucide-react';
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
    const { user,logout,loading} = useAuth();
+  
+  
   if (loading) return <p>Loading</p>; // or a loading spinner
-
+  
   return (
     <nav className="bg-black text-white px-6 py-4 shadow-md">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -32,7 +34,7 @@ const Navbar = () => {
             <div className="relative group">
               <User className="w-9 h-9 rounded-full cursor-pointer" />
               <div className="absolute right-0 mt-2 w-40 bg-black text-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition duration-200 z-10">
-                <Link to="/profile" className="block px-4 py-2 hover:bg-gray-900 ">{user ? `${user.data?.username} profile`: "Guest profile"}</Link>
+                <Link to="/profile" className="block px-4 py-2 hover:bg-gray-900 ">{user ? `${user?.username} profile`: "Guest profile"}</Link>
                 <Link to="/" onClick={logout} className="block px-4 py-2  hover:bg-gray-900">Logout</Link>
               </div>
             </div>
@@ -65,7 +67,7 @@ const Navbar = () => {
           ) : (
             <div className="space-y-2">
 
-              <Link to="/profile" className="block px-4 py-2 hover:bg-gray-800 rounded">{user ? `${user.data?.username} profile`: "Guest profile"}</Link>
+              <Link to="/profile" className="block px-4 py-2 hover:bg-gray-800 rounded">{user ? `${user?.username} profile`: "Guest profile"}</Link>
               <Link to="/" onClick={logout} className="block px-4 py-2 hover:bg-gray-800 rounded">Logout</Link>
             </div>
           )}

@@ -22,6 +22,7 @@ export const getallservers = async () => {
 export const getserverbyid = async (serverid) => {
     try {
         const response = await axios.get(`/server/${serverid}`);
+    
         return response.data;
     } catch (error) {
         console.error("Error fetching server by ID:", error);
@@ -52,7 +53,7 @@ export const deleteServer = async (serverid) => {
 export const getSubmittedServers = async () => {
     try {
         const response = await axios.get("/server/submittedserver");
-        console.log(response.data)
+     
         return response.data;
     } catch (error) {
         console.error("Error fetching submitted servers:", error);

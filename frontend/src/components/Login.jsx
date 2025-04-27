@@ -31,7 +31,7 @@ export default function Login() {
 
     try {
         const res = await loginUser(formData);
-          setUser(res.data);
+          setUser(res);
           setToast("Login successful!");
           setTimeout(() => navigate("/"), 2000); // navigate after 2s
         

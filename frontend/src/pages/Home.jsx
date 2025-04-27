@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { getallservers } from "../api/server";
 import ServerCard from "../components/ServerCard";
 import ServerSearch from "../components/SearchServer";
+
 export default function Home() {
   const tags = [
     "Community", "Database", "API", "Data", "Cloud", "Kubernetes", "AI", "Vector", "Browser", "Docker",
     "Security", "Monitoring", "HTTP", "Github", "Communication", "Youtube"
   ];
+
+
 
    const [servers, setServers] = useState([]);
    const [loading, setLoading] = useState(true);
@@ -17,9 +20,12 @@ export default function Home() {
        try {
          const res = await getallservers();
          setSearchServer(res.data.servers);
-         const limitedServers = res.data.servers.slice(0, 3); // Limit to 6 servers
+         const sortedServers = [...res.data.servers].sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+         const limitedServers = sortedServers.slice(0, 3); 
          setServers(limitedServers);
-        // update this depending on your response 
+        
        } catch (err) {
          console.error("Failed to fetch servers:", err);
        } finally {
@@ -29,6 +35,8 @@ export default function Home() {
  
      fetchServers();
    }, []);
+
+ 
 
   return (
     <div className="bg-black text-white min-h-screen flex flex-col">

@@ -15,8 +15,8 @@ export const registerUser = async (userData) => {
 export const loginUser = async (userData) => {
     try {
         const response = await axios.post('/user/login', userData);
-        
-        return response;
+        console.log(response)
+        return response.data.data.loggedinuser;
     } catch (error) {
         console.error('Error logging in user:', error);
         throw error;
