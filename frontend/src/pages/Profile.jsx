@@ -10,7 +10,7 @@ import { getSubmittedServers } from "../api/server";
 
 export default function UserProfile() {
   const { user } = useAuth();
-
+  
 
  
   const [submittedServers, setSubmittedServers] = useState([]);
@@ -69,9 +69,9 @@ export default function UserProfile() {
           <div className="space-y-2 text-sm mb-4">
             <p><span className="font-semibold">Username:</span> {user?.username}</p>
             <p><span className="font-semibold">Email:</span> {user?.email}</p>
-            <p><span className="font-semibold">Submitted Servers:</span> {user?.submittedserver?.length || 0}</p>
+            <p><span className="font-semibold">Submitted Servers:</span> {submittedServers?.length || 0}</p>
           </div>
-
+    
           <button
             onClick={() => setShowChangePassword(!showChangePassword)}
             className="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded transition cursor-pointer"
@@ -131,7 +131,7 @@ export default function UserProfile() {
             </form>
           )}
 
-          {toast && <Toastcomponent message={toast} />}
+        <div className="mt-2 text-center"> {toast && <Toastcomponent message={toast} />}</div> 
         </div>
 
         {/* Server Cards */}

@@ -244,6 +244,11 @@ const userProfile = asynchandler(async (req, res) => {
 
 
 const getcurrentuser =(req,res) => {
+  if(!req.user){
+    return res.status(200).json(
+      new ApiResponse(200, {}, "user not found")
+    )
+  }
    return res.status(200).json(
     new ApiResponse(200, req.user, "current user retrieved successfully")
   )

@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import ConfirmModal from "./ConfirmModal";
 import { deleteServer, getserverbyid } from "../api/server";
 import { Toastcomponent } from "./Toast";
-import { useAuth } from "../contexts/AuthContext";
+
+import { getcurentUser } from "../api/user";
 
 const ServerDetails = () => {
   const { serverid } = useParams();
@@ -11,7 +12,7 @@ const ServerDetails = () => {
   const [server, setServer] = useState(null);
 const [showModal, setShowModal] = useState(false);
 const [error,setError] = useState("")
-const  {user} = useAuth()
+
 const [isOwner , setisOwner] = useState(false)
 
 const navigate = useNavigate();
@@ -19,9 +20,10 @@ const navigate = useNavigate();
        const fetchServer = async () => {
       try {
         const res = await getserverbyid(decodedId);
-      
-        setServer(res.data);
-        setisOwner(res.data?.submittedBy?._id === user?.data?._id)
+        const serverData = res.data;
+        setServer(serverData);
+
+        
       }
       catch (err) {
         console.error("Failed to fetch server:", err);
@@ -36,6 +38,27 @@ const navigate = useNavigate();
     fetchServer();
   }, []);
 
+  useEffect(() => {
+    const checkOwner = async () => {
+      try {
+        const currentUser = await getcurentUser();
+      
+        if (currentUser && currentUser.data._id === server?.submittedBy?._id) {
+          setisOwner(true);
+        } else {
+          setisOwner(false);
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+
+    checkOwner();
+  }, [server]);
+
+
+
+
   const handleEdit = () => {
     navigate(`/servers/edit/${decodedId}`);
   };
@@ -44,6 +67,7 @@ const navigate = useNavigate();
     try {
       await deleteServer(decodedId);
       navigate("/servers");
+
     } catch (error) {
       console.error(error);
       setError("Failed to delete server");
