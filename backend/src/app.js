@@ -21,16 +21,9 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }))
 app.use(cookieParser())
 
 app.get('/', (res) => {
-    res.json({
-      message: "Welcome to MCP Server Hub API",
-      status: "Active",
-      version: "1.0.0",
-      endpoints: {
-        servers: "/api/v1/server",
-        users: "/api/v1/user"
-      }
-    });
+    res.send('Welcome to the MCP Central API. Use /api/v1/user or /api/v1/server.');
   });
+  
 
 import userRoutes from './Routes/user.routes.js'
 import serverRoutes from './Routes/server.routes.js'
