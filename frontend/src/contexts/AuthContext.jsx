@@ -13,9 +13,11 @@ export const AuthProvider = ({ children }) => {
         const fetchUser = async () => {
             try {
                 const currentUser = await getcurentUser();
-                setUser(currentUser);
+                setUser(currentUser.data);
             } catch (error) {
-                console.error("Error fetching user:", error);
+
+               
+               throw new Error("Failed to fetch user");
             } finally {
                 setLoading(false);  
             }
@@ -28,10 +30,12 @@ export const AuthProvider = ({ children }) => {
     const logout = async () => {
         try {
             await logoutUser();
+            
             setUser(null);
         } catch (error) {
             console.error("Error logging out:", error);
         }
+   
     }
     return (
         <AuthContext.Provider value={{ user,setUser,logout, loading }}>

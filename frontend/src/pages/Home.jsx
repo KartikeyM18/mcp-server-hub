@@ -9,7 +9,7 @@ export default function Home() {
     "Security", "Monitoring", "HTTP", "Github", "Communication", "Youtube"
   ];
 
-
+   
 
    const [servers, setServers] = useState([]);
    const [loading, setLoading] = useState(true);
@@ -23,7 +23,7 @@ export default function Home() {
          const sortedServers = [...res.data.servers].sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
-         const limitedServers = sortedServers.slice(0, 3); 
+         const limitedServers = sortedServers.slice(0, 5); 
          setServers(limitedServers);
         
        } catch (err) {

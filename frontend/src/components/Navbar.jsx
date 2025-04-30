@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import {  useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { Link,NavLink} from 'react-router-dom';
@@ -9,9 +9,17 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
    const { user,logout,loading} = useAuth();
   
-  
-  if (loading) return <p>Loading</p>; // or a loading spinner
-  
+   
+  if (loading) return <p>Loading ....</p>; // or a loading spinner
+
+  const handlelogout = async () => {
+    try {
+      await logout();
+      setMenuOpen(false); // Close the menu after logout
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  }
   return (
     <nav className="bg-black text-white px-6 py-4 shadow-md">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -35,7 +43,7 @@ const Navbar = () => {
               <User className="w-9 h-9 rounded-full cursor-pointer" />
               <div className="absolute right-0 mt-2 w-40 bg-black text-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition duration-200 z-10">
                 <Link to="/profile" className="block px-4 py-2 hover:bg-gray-900 ">{user ? `${user?.username} profile`: "Guest profile"}</Link>
-                <Link to="/" onClick={logout} className="block px-4 py-2  hover:bg-gray-900">Logout</Link>
+                <Link to="/" onClick={handlelogout} className="block px-4 py-2  hover:bg-gray-900">Logout</Link>
               </div>
             </div>
           )}
@@ -68,7 +76,7 @@ const Navbar = () => {
             <div className="space-y-2">
 
               <Link to="/profile" className="block px-4 py-2 hover:bg-gray-800 rounded">{user ? `${user?.username} profile`: "Guest profile"}</Link>
-              <Link to="/" onClick={logout} className="block px-4 py-2 hover:bg-gray-800 rounded">Logout</Link>
+              <Link to="/" onClick={handlelogout} className="block px-4 py-2 hover:bg-gray-800 rounded">Logout</Link>
             </div>
           )}
         </div>

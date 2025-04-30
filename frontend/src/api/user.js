@@ -15,7 +15,7 @@ export const registerUser = async (userData) => {
 export const loginUser = async (userData) => {
     try {
         const response = await axios.post('/user/login', userData);
-        console.log(response)
+       
         return response.data.data.loggedinuser;
     } catch (error) {
         console.error('Error logging in user:', error);
@@ -40,9 +40,10 @@ export const getcurentUser = async () => {
         const response = await axios.get('/user/currentuser',{
             withCredentials: true
         })
+      
         return response.data
     } catch (error) {
-        console.error('Error fetching user:', error)
+        
         throw error
     }
 }
