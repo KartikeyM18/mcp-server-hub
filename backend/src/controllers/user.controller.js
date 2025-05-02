@@ -100,7 +100,8 @@ const loginUser = asynchandler(async (req, res) => {
   const loggedinuser = await User.findById(user._id).select("-password -refreshToken");
   const options = {
     httpOnly: true,
-    secure: true
+    secure: true,
+    sameSite: "None",
   }
 
   return res.status(200).cookie("refreshToken", refreshToken, options).cookie("accessToken", accessToken, options).json(
@@ -130,6 +131,8 @@ const logoutuser = asynchandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
+    sameSite: "None",
+  
   }
 
   return res.status(200).clearCookie("accessToken", options).
@@ -164,6 +167,7 @@ const refreshingtheaccesstokens = asynchandler(async (req, res) => {
     const options = {
       httpOnly: true,
       secure: true,
+      sameSite: "None",
     }
 
     const { newrefreshToken, accessToken } = await generatebothtokens(user._id)
