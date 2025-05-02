@@ -25,7 +25,7 @@ export const loginUser = async (userData) => {
 
 export const logoutUser = async () => {
     try {
-        const response = await axios.post('/user/logout',{
+        const response = await axios.post('/user/logout',{},{
             withCredentials: true
         })
         return response.data
