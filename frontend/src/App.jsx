@@ -12,6 +12,7 @@ import Server from  './pages/Server'
 import EditServer from './pages/EditServer'
 
 import { useAuth } from './contexts/AuthContext'
+import ServerApprove from './pages/ServerApprove'
 const router = createBrowserRouter(
   createRoutesFromElements(
      <Route path="/" element={<Layout/>}> 
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
       <Route path='servers' element={<AllServers/>}/>
       <Route path='servers/:serverid' element={<Server/>} />
       <Route path='servers/edit/:serverid' element={<EditServer/>}/>
+      <Route path='approve' element={<ServerApprove/>}/>
       
      </Route>
   
