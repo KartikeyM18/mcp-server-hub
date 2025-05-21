@@ -26,6 +26,8 @@ app.use(cookieParser())
 
 import userRoutes from './Routes/user.routes.js'
 import serverRoutes from './Routes/server.routes.js'
+import developerRoutes from './Routes/developer.routes.js'
 app.use('/user', userRoutes)
 app.use('/server', serverRoutes)
+app.use('/developer', developerRoutes)
 export default app

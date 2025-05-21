@@ -32,7 +32,14 @@ const userSchema = new Schema({
             ref: 'Server'
             
         }
-    ]
+    ],
+
+    messages: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Message'
+        }
+    ],
 
 },{
     timestamps: true

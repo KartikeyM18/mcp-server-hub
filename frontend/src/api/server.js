@@ -60,3 +60,14 @@ export const getSubmittedServers = async () => {
         throw error;
     }
 }
+
+export const getserversbyapproval = async (approvalstatus) =>{
+    try{
+        const response = await axios.get(`/server/byapprovelserver?approvalstatus=${approvalstatus}`)
+        return response.data
+
+    }catch(error){
+          console.error("error fetching approved servers",error)
+          throw error
+    }
+}

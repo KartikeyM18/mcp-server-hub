@@ -1,56 +1,52 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const ServerSearch = ({ servers }) => {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const filtered = search.trim()
-  ? servers.filter((server) =>
-      server.tags.some((tag) =>
-        tag.toLowerCase().includes(search.toLowerCase())
+    ? servers.filter((server) =>
+        server.tags.some((tag) =>
+          tag.toLowerCase().includes(search.toLowerCase())
+        )
       )
-    )
-  : [];
-
+    : [];
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-4">
+    <div className="max-w-2xl mx-auto px-4 py-6">
       <input
         type="text"
+        aria-label="Search servers by tag"
         placeholder="🔍 Search servers by tag (e.g., node, react...)"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full p-3 border border-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6"
+        className="w-full p-3 border border-gray-700 rounded-xl bg-gray-900 text-white
+                   placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6 transition"
       />
 
       {filtered.length === 0 ? (
-        <p className="text-gray-500 text-center">No servers found with that tag.</p>
+        <p className="text-gray-400 text-center">No servers found with that tag.</p>
       ) : (
         <div className="grid gap-4">
-          {filtered.map((server, idx) => (
+          {filtered.map((server) => (
             <Link
               to={`/servers/${server._id}`}
-              key={idx}
-              className="p-5 bg-black shadow-md rounded-xl b border-1 border-gray-600 hover:shadow-lg transition"
+              key={server._id}
+              className="block p-5 bg-gray-900 border border-gray-700 rounded-xl shadow-md
+                         hover:shadow-lg transition-shadow duration-300"
             >
-            <div
-              key={idx}
-              className="p-5 bg-black shadow-md rounded-xl  hover:shadow-lg transition"
-            >
-              <h2 className="text-xl font-semibold mb-1">{server.name}</h2>
-              <p className="text-gray-600 mb-2">{server.description}</p>
+              <h2 className="text-xl font-semibold mb-2 text-white">{server.name}</h2>
+              <p className="text-gray-400 mb-3">{server.description}</p>
               <div className="flex flex-wrap gap-2">
                 {server.tags.map((tag, i) => (
                   <span
                     key={i}
-                    className="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full"
+                    className="px-3 py-1 bg-blue-700 bg-opacity-20 text-blue-400 text-sm rounded-full select-none"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
-            </div>
             </Link>
           ))}
         </div>
@@ -60,3 +56,5 @@ const ServerSearch = ({ servers }) => {
 };
 
 export default ServerSearch;
+
+

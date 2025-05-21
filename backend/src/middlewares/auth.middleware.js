@@ -55,3 +55,19 @@ export const optionalJwt = async (req, _, next) => {
 
   next();
 };
+
+export const isDevAuthenticated = (req, res, next) => {
+  const token = req.cookies?.devToken;
+  if (!token) throw new ApiError(401, "Not authenticated");
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_DEV_SECRET);
+    if (decoded.role !== "developer") throw new ApiError(403, "Forbidden");
+    req.user = decoded;
+    next();
+  } catch (err) {
+    req.user = null;
+    throw new ApiError(401, "Invalid or expired token");
+  }
+};
+
