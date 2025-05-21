@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import ServerCard from "../components/ServerCard";
 
-import { getallservers } from "../api/server";
+import {  getallservers } from "../api/server";
 
 
 
@@ -15,7 +15,9 @@ const AllServers = () => {
     const fetchServers = async () => {
       try {
         const res = await getallservers();
-        setServers(res.data.servers);
+        const approvedservers = res.data.servers.filter((server) => server.Approved === "approved");
+    
+        setServers(approvedservers);
         // update this depending on your response 
       } catch (err) {
         console.error("Failed to fetch servers:", err);
@@ -36,6 +38,8 @@ const AllServers = () => {
 
       {loading ? (
         <p className="text-center">Loading servers...</p>
+      ) : servers.length === 0 ? (
+        <p className="text-center text-gray-400">No servers found which are approved.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
           {servers.map((server) => (

@@ -9,86 +9,91 @@ export default function Home() {
     "Security", "Monitoring", "HTTP", "Github", "Communication", "Youtube"
   ];
 
-   
+  const [servers, setServers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchedserver, setSearchServer] = useState([]);
 
-   const [servers, setServers] = useState([]);
-   const [loading, setLoading] = useState(true);
-   const [searchedserver,setSearchServer] = useState([]);
-   useEffect(() => {
- 
-     const fetchServers = async () => {
-       try {
-         const res = await getallservers();
-         setSearchServer(res.data.servers);
-         const sortedServers = [...res.data.servers].sort(
+  useEffect(() => {
+    const fetchServers = async () => {
+      try {
+        const res = await getallservers();
+        setSearchServer(res.data.servers);
+
+        const sortedServers = [...res.data.servers].sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
-         const limitedServers = sortedServers.slice(0, 5); 
-         setServers(limitedServers);
-        
-       } catch (err) {
-         console.error("Failed to fetch servers:", err);
-       } finally {
-         setLoading(false);
-       }
-     };
- 
-     fetchServers();
-   }, []);
 
- 
+        const limitedServers = sortedServers.slice(0, 6).filter((server) => server.Approved === "approved");
+        setServers(limitedServers);
+      } catch (err) {
+        console.error("Failed to fetch servers:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServers();
+  }, []);
 
   return (
-    <div className="bg-black text-white min-h-screen flex flex-col">
-   
-
-      {/* Hero */}
-      <header className="text-center py-20 bg-gradient-to-b from-black to-gray-900">
-        <h1 className="text-4xl md:text-6xl font-bold text-blue-500">From Server to Solution: The Best MCP Tools in One Place</h1>
-        <p className="mt-4 text-gray-300 text-lg max-w-2xl mx-auto">
-        Optimize LLM Performance with MCP Servers – Find the Ideal Tools for Your Workflow
+    <div className="bg-[#121212] text-gray-200 min-h-screen flex flex-col">
+      
+      {/* Hero Section */}
+      <header className="text-center py-28 px-6 md:px-12 bg-gradient-to-b from-[#263958] to-[#0F172A] shadow-lg">
+        <h1 className="text-4xl md:text-6xl font-extrabold leading-tight bg-gradient-to-r from-[#3083ea] via-[#b4d2ee] to-[#1062a4] bg-clip-text text-transparent drop-shadow-lg">
+          From Server to Solution: The Best MCP Tools in One Place
+        </h1>
+        <p className="mt-6 max-w-3xl mx-auto text-gray-400 text-lg md:text-xl font-medium tracking-wide">
+          Optimize LLM Performance with MCP Servers – Find the Ideal Tools for Your Workflow
         </p>
       </header>
 
       {/* Tag Explorer */}
-      <section className="px-6 md:px-12 py-12">
-        <h2 className="text-2xl font-semibold mb-4">Explore by Tags</h2>
-        <div className="flex flex-wrap gap-3">
-          {tags.map(tag => (
-            <span key={tag} className="bg-gray-800 text-sm px-3 py-1 rounded-full hover:bg-blue-600 transition">
-              {tag}
+      <section className="px-6 md:px-12 py-16 max-w-7xl mx-auto">
+        <h2 className="text-3xl font-semibold mb-8 tracking-wide text-[#22e6df] drop-shadow-md">
+          Explore by Tags
+        </h2>
+        <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+          {tags.map((tag) => (
+            <span
+              key={tag}
+              className="cursor-pointer bg-[#1F2937] text-[#a5b4fc] px-5 py-2 rounded-full font-semibold text-sm shadow-md hover:bg-[#14b8a6] hover:text-[#0f172a] transition duration-300 ease-in-out"
+              title={`Filter by ${tag}`}
+            >
+              #{tag}
             </span>
           ))}
         </div>
       </section>
 
       {/* Search Bar */}
-      <section className="px-6 md:px-12 py-12">
-       <ServerSearch servers={searchedserver} />
+      <section className="px-6 md:px-12 max-w-4xl mx-auto mb-20">
+        <ServerSearch servers={searchedserver} />
       </section>
 
-      {/* Newly Released Servers */}
-      <section className="px-6 md:px-12 py-12">
-        <h2 className="text-2xl font-semibold mb-6">Newly Released</h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          { loading ? (
-        <p className="text-center">Loading servers...</p>
-      ) : servers.map((server) => 
-        (
-          <ServerCard
-          key={server._id}
-          _id={server._id}
-          name={server.name}
-          description={server.description}
-          tags={server.tags}
-          submittedBy={server.submittedBy}
-        />
-          )
-          )}
-        </div>
-      </section>
+      {/* Newly Released */}
+      <section className="px-6 md:px-12 py-16 max-w-7xl mx-auto">
+        <h2 className="text-3xl font-semibold mb-10 text-[#22c5b8] drop-shadow-md">
+          🆕 Newly Released Servers
+        </h2>
 
-    
+        {loading ? (
+          <p className="text-center text-gray-500 text-lg animate-pulse">Loading servers...</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+            {servers.map((server) => (
+              <ServerCard
+                key={server._id}
+                _id={server._id}
+                name={server.name}
+                description={server.description}
+                tags={server.tags}
+                submittedBy={server.submittedBy}
+              />
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 }

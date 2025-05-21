@@ -53,8 +53,16 @@ const serverSchema = new mongoose.Schema({
         }
       },
       
-      
-    
+    Approved:{
+        type:String,
+        enum: ['approved', 'pending', 'rejected'],
+        default: 'pending',            
+    }, 
+      rejectionMessage: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Message',
+    default: null,
+  },
     status: {
         type: String,
         enum: ['active', 'inactive'],

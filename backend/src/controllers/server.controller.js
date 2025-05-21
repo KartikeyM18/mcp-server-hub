@@ -26,6 +26,7 @@ const submitaserver = asynchandler(async (req, res) => {
             tags: tags || [],
             status: status || "active",
             submittedBy
+
         });
 
         if (!server) {
@@ -123,7 +124,7 @@ const getallservers = asynchandler(async (req, res) => {
     try {
 
         const servers = await Server.find().populate('submittedBy', 'email');
-
+  
         return res.status(200).json(
             new ApiResponse(200, { servers }, "All servers retrieved successfully")
         );
@@ -132,6 +133,27 @@ const getallservers = asynchandler(async (req, res) => {
     }
 });
 
+const getallserversbyapproval = asynchandler(async (req, res) => {
+    const {approvalstatus } = req.query;
+    if (!approvalstatus) {
+        throw new ApiError(400, "Approval status is required");
+    }
+      const validStatuses = ["approved", "pending", "rejected"];
+  if (!validStatuses.includes(approvalstatus)) {
+    throw new ApiError(400, "Invalid approval status");
+  }
+ 
+    try {
+        const servers = await Server.find({ Approved: approvalstatus }).populate('submittedBy', 'email');
+
+        return res.status(200).json(
+            new ApiResponse(200, { servers }, "Servers retrieved successfully")
+        );
+    } catch (error) {
+        throw new ApiError(500, "Error retrieving servers");
+    }
+})
+
 const getserverbyid = asynchandler(async (req, res) => {
     const { serverid } = req.params;
     if (!serverid) {
@@ -139,7 +161,7 @@ const getserverbyid = asynchandler(async (req, res) => {
     }
 
     try {
-        const server = await Server.findById(serverid).populate('submittedBy', 'name email');
+        const server = await Server.findById(serverid).populate('submittedBy', 'name email').populate('rejectionMessage', 'content');
 
         if (!server) {
             throw new ApiError(404, "Server not found");
@@ -173,7 +195,7 @@ const getSubmittedServers = asynchandler(async (req, res) => {
 })
 
 
-export { submitaserver,editServer,deleteServer,getallservers,getserverbyid ,getSubmittedServers};
+export { submitaserver,editServer,deleteServer,getallservers,getserverbyid ,getSubmittedServers,getallserversbyapproval};
 
 
 

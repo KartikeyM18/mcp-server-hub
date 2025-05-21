@@ -259,5 +259,5 @@ const getcurrentuser =(req,res) => {
 } 
 
 export {
-  registerUser, loginUser, logoutuser, refreshingtheaccesstokens, changecurrpassword, SubmittedServers, userProfile,getcurrentuser
+  registerUser, loginUser, logoutuser, refreshingtheaccesstokens, changecurrpassword, SubmittedServers, userProfile,getcurrentuser,generatebothtokens
 };
