@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getallservers } from "../api/server";
 import ServerCard from "../components/ServerCard";
 import ServerSearch from "../components/SearchServer";
-
+import ServerCardSkeleton from "../components/ServerCardSkeleton";
 export default function Home() {
   const tags = [
     "Community", "Database", "API", "Data", "Cloud", "Kubernetes", "AI", "Vector", "Browser", "Docker",
@@ -78,7 +78,11 @@ export default function Home() {
         </h2>
 
         {loading ? (
-          <p className="text-center text-gray-500 text-lg animate-pulse">Loading servers...</p>
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <ServerCardSkeleton key={i} />
+            ))}
+          </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
             {servers.map((server) => (
@@ -89,6 +93,8 @@ export default function Home() {
                 description={server.description}
                 tags={server.tags}
                 submittedBy={server.submittedBy}
+                onclickroute={`/servers/${server._id}`}
+                status={server.status}
               />
             ))}
           </div>

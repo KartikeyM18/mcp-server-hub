@@ -8,12 +8,14 @@ const EditForm = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { serverid } = useParams();
-
+  
+  const [issubmitting, setIssubmitting] = useState(false);
   const [serverData, setServerData] = useState({
     name: '',
     description: '',
     githubRepo: '',
     tags: '',
+    status: 'active',
     sections: [{ title: '', details: '' }],
   });
 
@@ -35,6 +37,7 @@ const EditForm = () => {
           description,
           githubRepo,
           tags: tags.join(','),
+          status: status || 'inactive',
           sections,
         });
       } catch (err) {
@@ -72,6 +75,7 @@ const EditForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIssubmitting(true);
     const payload = {
       ...serverData,
       tags: serverData.tags.split(',').map((tag) => tag.trim()),
@@ -80,11 +84,13 @@ const EditForm = () => {
 
     try {
       await editServer(serverid, payload);
+      setIssubmitting(false);
       navigate('/servers');
     } catch (err) {
       console.error(err);
       setError('Failed to update server.');
     }
+    setIssubmitting(false);
   };
 
   if (error) return <Toastcomponent message={error} />;
@@ -184,8 +190,55 @@ const EditForm = () => {
           type="submit"
           className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition cursor-pointer"
         >
-          Save Changes
+
+          {issubmitting ? (
+            <span className="flex items-center justify-center">
+              <svg
+                className="animate-spin h-5 w-5 mr-3 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 1 1 16 0A8 8 0 0 1 4 12z"
+                />
+              </svg>
+              Updating...
+            </span>
+          ) : (
+            'Update Server'
+          )}
         </button>
+
+        <div className="flex items-center gap-4">
+  <span className="text-gray-800 dark:text-gray-200 font-medium">
+    Status: 
+    <span className={`ml-2 px-2 py-1 rounded-full text-sm ${
+      serverData.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+    }`}>
+      {serverData.status}
+    </span>
+  </span>
+  <button
+    type="button"
+    onClick={() =>
+      setServerData({ ...serverData, status: serverData.status === 'active' ? 'inactive' : 'active' })
+    }
+    className="bg-gray-700 hover:bg-gray-800 text-white px-4 py-1.5 rounded-lg transition cursor-pointer"
+  >
+    Toggle Status
+  </button>
+</div>
+
       </div>
     </form>
   );

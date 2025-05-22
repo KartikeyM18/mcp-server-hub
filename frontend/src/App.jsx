@@ -17,8 +17,10 @@ import Logindev from './components/Logindev'
 import Devhome from './pages/Devhome'
 import ProtectedDevRoute from './components/ProtectedDevRoute'
 import GiveApproval from './pages/GiveApproval'
-import LoadingSpinner from './components/LoadingSpinner'
+
 import ErrorFallback from './components/ErrorBoundary'
+import DevServer from './pages/Devserver'
+import BasicPageSkeleton from './components/BasicPageskeleton'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />} errorElement={<ErrorFallback error={new Error("Root error")} />}>
@@ -34,6 +36,7 @@ const router = createBrowserRouter(
       <Route path="developer" errorElement={<ErrorFallback error={new Error("Developer route error")} />}>
         <Route path="dev-login" element={<Logindev />} />
         <Route path="dev-home" element={<ProtectedDevRoute><Devhome /></ProtectedDevRoute>} />
+        <Route path="dev-home/:serverid" element={<ProtectedDevRoute><DevServer /></ProtectedDevRoute>} />
         <Route path="giveapproval/:serverid" element={<ProtectedDevRoute><GiveApproval /></ProtectedDevRoute>} />
       </Route>
 
@@ -47,7 +50,7 @@ const router = createBrowserRouter(
 function App() {
   const { loading } = useAuth();
   if (loading) {
-    return <div className="flex items-center justify-center h-screen bg-black text-white"><LoadingSpinner/></div>;
+    return <div className="flex items-center justify-center h-screen bg-black text-white"><BasicPageSkeleton/></div>;
   }
   
   return ( 

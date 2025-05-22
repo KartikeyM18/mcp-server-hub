@@ -1,6 +1,7 @@
 import ServerDetails from "../components/ServerDetails";
 
-export default function Server() {
+export default function DevServer() {
+  
   return (
     <div className="bg-gradient-to-br from-gray-900 via-gray-950 to-black min-h-screen text-white">
       <div className="max-w-7xl mx-auto px-4 py-12">
@@ -9,15 +10,16 @@ export default function Server() {
         </h1>
 
         <div className="rounded-2xl shadow-lg bg-gray-900/60 backdrop-blur-md p-6 border border-gray-700">
-         <ServerDetails
-      backRoute={-1}
-      showEdit={true}
-      showDelete={true}
-      showApproval={false}
-      showOwnerOnlyButtons={true}
-      goHome="/"
-
+     <ServerDetails
+      backRoute="/developer/dev-home"
+      showEdit={false}
+      showDelete={false}
+      showApproval={true}
+      showOwnerOnlyButtons={false}
+      goHome="/developer/dev-home"
+      
     />
+
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 export default function Layout() {
 
   const location = useLocation()
-  const hideHeaderRoutes = ["/login", "/register", "/developer/dev-login", "/developer/dev-home","/servers/:serverid" , "/developer/giveapproval/:serverid","/404"];
+  const hideHeaderRoutes = ["/login", "/register", "/developer/dev-login", "/developer/dev-home","/servers/:serverid" , "/developer/giveapproval/:serverid","/404","/developer/dev-home/:serverid"];
 const shouldHideHeader = hideHeaderRoutes.some((route) =>
   matchPath({ path: route, end: true }, location.pathname)
 );
