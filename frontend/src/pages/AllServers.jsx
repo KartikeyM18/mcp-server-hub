@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import ServerCard from "../components/ServerCard";
 
 import {  getallservers } from "../api/server";
+import ServerCardSkeleton from "../components/ServerCardSkeleton";
 
 
 
@@ -37,7 +38,11 @@ const AllServers = () => {
     <div className="max-w-7xl mx-auto px-4 py-8">
 
       {loading ? (
-        <p className="text-center">Loading servers...</p>
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <ServerCardSkeleton key={i} />
+            ))}
+          </div>
       ) : servers.length === 0 ? (
         <p className="text-center text-gray-400">No servers found which are approved.</p>
       ) : (
@@ -50,6 +55,8 @@ const AllServers = () => {
               description={server.description}
               tags={server.tags}
               submittedBy={server.submittedBy}
+              onclickroute={`/servers/${server._id}`}
+              status={server.status}
             />
           ))}
         </div>

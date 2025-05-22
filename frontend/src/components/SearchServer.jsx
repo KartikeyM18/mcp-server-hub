@@ -25,7 +25,7 @@ const ServerSearch = ({ servers }) => {
       />
 
       {filtered.length === 0 ? (
-        <p className="text-gray-400 text-center">No servers found with that tag.</p>
+        <p className="text-gray-400 text-center">{ search === "" ? "" : "No servers found with that tag"}</p>
       ) : (
         <div className="grid gap-4">
           {filtered.map((server) => (
@@ -41,7 +41,7 @@ const ServerSearch = ({ servers }) => {
                 {server.tags.map((tag, i) => (
                   <span
                     key={i}
-                    className="px-3 py-1 bg-blue-700 bg-opacity-20 text-blue-400 text-sm rounded-full select-none"
+                    className="px-3 py-1 bg-white bg-opacity-20 text-black text-sm rounded-full select-none"
                   >
                     {tag}
                   </span>

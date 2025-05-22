@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Menu, X, User } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner";
 
 const activeLink = "text-blue-500 border-b-2 border-blue-500";
@@ -11,13 +11,15 @@ const inactiveLink =
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, logout, loading } = useAuth();
-
+  const navigate = useNavigate();
   if (loading) return <LoadingSpinner/>
 
   const handleLogout = async () => {
     try {
       await logout();
+
       setMenuOpen(false);
+      navigate("/");
     } catch (error) {
       console.error("Error logging out:", error);
     }

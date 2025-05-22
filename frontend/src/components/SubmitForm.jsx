@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 export default function SubmitServer() {
   const { user } = useAuth();
   const navigate = useNavigate();
-
+  const [issubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -53,7 +53,7 @@ export default function SubmitServer() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsSubmitting(true);
     const payload = {
       ...formData,
       submittedBy: user?._id,
@@ -62,6 +62,7 @@ export default function SubmitServer() {
 
     try {
       await submitserver(payload);
+      setIsSubmitting(false);
       setMessage("✅ Server submitted successfully!");
       setFormData({
         name: "",
@@ -72,6 +73,7 @@ export default function SubmitServer() {
         status: "active",
       });
       setNewSection({ title: "", details: "" });
+
     } catch (err) {
       console.error(err);
       setMessage("❌ Something went wrong. Please try again.");
@@ -80,6 +82,8 @@ export default function SubmitServer() {
     setTimeout(() => {
       setMessage(null);
     }, 3000);
+
+    setIsSubmitting(false);
 
     setTimeout(() => {
       navigate("/servers");
@@ -183,7 +187,24 @@ export default function SubmitServer() {
           type="submit"
           className="w-full bg-blue-600 py-3 rounded text-lg font-semibold hover:bg-blue-700 transition cursor-pointer"
         >
-          Submit Server
+          {issubmitting ? (
+            <span className="flex items-center justify-center">
+              <svg
+                className="animate-spin h-5 w-5 mr-3 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm0 18a8 8 0 1 1 8-8A8.009 8.009 0 0 1 12 20z"
+                />
+              </svg>
+              Submitting...
+            </span>
+          ) : (
+            "Submit Server"
+          )}
+    
         </button>
       </form>
 
